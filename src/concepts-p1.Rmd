@@ -27,10 +27,35 @@ Let's start by defining **stochastic processes**: A family of _indexed_ random v
 For example, one of the basic time series is **white noise**, which is a time series
 generated from uncorrelated variables, which are most of the time *normally distributed*.
 
-You can also embed plots, for example:
+```{r whitenoise}
+white.noise <-  rnorm(300,0,1) # N(0,1) variates 
+plot(white.noise, type = "l")
+#lines(w)
+#v = filter(w, sides=2, filter=rep(1/3,3)) # moving average
+```
 
-```{r pressure, echo=FALSE}
-plot(pressure)
+This collection of random variables $e_{t}$ have the following properties:
+
+1. $E(e_{t}) = 0$
+2. $E(e_{t}e_{s}) = 0$
+3. $E(e^{2}_{t}) = \sigma^{2}$
+
+For this particular case, having only a couple hundred observations, the estimations are slightly biased but we can observe nevertheless that these properties are conserved. Here we have descriptive statistics for the previously generated **realisation** of _gaussian white noise_, as well as a visualisation of its distribution courtesy of [ggplot2](https://ggplot2.tidyverse.org/).
+
+```{r descriptive.stats}
+mean(white.noise)
+var(white.noise)
+library(ggplot2)
+ggplot(as.data.frame(white.noise), aes(x=white.noise)) +
+  geom_histogram(aes(y=..density..), colour="black", bins=18) +
+    geom_density(alpha=.2, fill="blue") 
+```
+
+```{r echo=FALSE}
+# library(ggplot2)
+#ex <- data.frame(1:1000, w)
+#colnames(ex) <- c("index", "noise")
+#p <- ggplot(ex, aes(x="index", "noise")) + geom_line(noise)
 ```
 
 Note that the `echo = FALSE` parameter was added to the code chunk to prevent printing of the R code that generated the plot.
