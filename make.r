@@ -1,12 +1,14 @@
 
-# Make rendering ez :
-library(ezknitr)
+# Required packages :
+library(rmarkdown)
 
 # List of files to render :
 rmd.files <- unlist(lapply(dir("src"), function(x){ file.path("src", x) }))
 # Render only to html, ommit md :
 render.to.html <- function(x){
-  ezknit(file = x, out_dir = "build", keep_md = FALSE)
+  render(x, output_dir = "build")
 }
 # Execute, assign to `renderd` to avoid unnecessary verbosity : 
 rendered <- lapply(rmd.files, render.to.html)
+
+## END

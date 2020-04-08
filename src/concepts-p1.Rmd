@@ -15,16 +15,17 @@ in [R](https://www.r-project.org/). R is a free software environment for statist
 
 ## Some definitions
 Let's start by defining **stochastic processes**: A family of _indexed_ random variables $Z(\omega, t)$ where $\omega$ belongs to a **sample space** and $t$ belongs to an **index set**.
-> - For a given $\omega$, $Z(\omega, t)$ as a function of $t$ is called a sample function or **realisation**.
-> - The population that consists of all possible realisations is called the **ensemble**.
-> - A **time series** is a collection of **random variables** indexed in a *ordered set* representing time periods.
 
+* For a given $\omega$, $Z(\omega, t)$ as a function of $t$ is called a sample function or **realisation**.
+* The population that consists of all possible realisations is called the **ensemble**.
+* A **time series** is a collection of **random variables** indexed in a *ordered set* representing time periods.
 
-```{r cars}
-summary(cars)
-```
+## Examples
 
-## Including Plots
+1. **White noise**
+
+For example, one of the basic time series is **white noise**, which is a time series
+generated from uncorrelated variables, which are most of the time *normally distributed*.
 
 You can also embed plots, for example:
 
