@@ -17,11 +17,18 @@ in [R](https://www.r-project.org/). R is a free software environment for statist
 ## Used packages
 When working with R, we can define our own functions and create modules called packages which serve a specific purpose. These can be submitted to [CRAN](https://cran.r-project.org/)(The Comprehensive R Archive Network). Publishing a package enables people to use the code you have developed!
 In this case we are using the following packages:
-```{r imports}
+```{r imports, message=FALSE, warning=FALSE}
 library(ggplot2)
 library(lubridate)
 library(reshape2)
 ```
+
+## Reproducibility
+In order for you to reproduce the results found in this notebooks, we must set a seed for the random number generator. This is a topic beyond the scope of this repo, but I highly advise you to read about [pseudorandom number generators](https://en.wikipedia.org/wiki/Pseudorandom_number_generator).
+```{r seed, message=FALSE, warning=FALSE}
+  set.seed(204) # so you can reproduce the results
+```
+
 
 ## Some definitions
 Let's start by defining **stochastic processes**: A family of _indexed_ random variables $Z(\omega, t)$ where $\omega$ belongs to a **sample space** and $t$ belongs to an **index set**.
@@ -69,13 +76,60 @@ We can visualise another type of _time series_, this time a real biomedical exam
 glc <- read.csv("../data/example_glucose.csv")
 glc$datetime <- sapply(glc$datetime, as_datetime)
 p.glc <- ggplot(data = glc, aes(x = as_datetime(datetime), y = glucose)) + 
-  geom_line(color = "#00AFBB", size = 2)
+  geom_line(color = "#00AFBB")
 print(p.glc)
 ```
 
 ## Basic techniques
 
-These include moving averages and filtering, autoregressions and random walks. hese are some of the building blocks used to work with more advanced time series models and handle missing values.
+These include moving averages and filtering, autoregressions and random walks. 
+These are some of the building blocks used to work with more advanced time series models and handle missing values.
+
+1. **Moving average**
+
+A moving average is calculated by taking the mean of a certain number of observations, measurements within a defined stencil/window. This is a widespread smoothing and filtering technique. After applying a moving average the slower oscillations are more apparent and some of the faster oscillations are taken out Its definition is as follows:
+
+$$
+  ma_{t} \; = \; \frac{1}{N} \sum_{i=0}^{N-1} v_{t-i}
+$$
+
+Where $ma_{t}$ represents the _moving average_ value at timestep $t$, defined using stencil of $N-1$ observations before the timestep (we could call them left or **past**) and that observation itself. We could alternatively define a _centered moving average_. Doing this operation requires the definition of a **lag operator**.
+
+2. **Lag operator**
+The lag operator sometimes called _backshift operator_, applied on a time series observation yields its previous element. Denoted $L$, operating on an arbitrary element of a time series $y_{t}$:
+
+$$
+  Ly_{t} = y_{t-1}
+$$
+
+The lag operator has some convenient properties that will be stated but not proven here.
+
+* The lag operator can be raised to powers. 
+$$
+    L^{n}y_{t} = y_{t-n}
+$$
+
+* Polynomials of it can be subsequently defined.
+$$
+  a(L) = a_{0} + a_{1}L + a_{2}L^{2} + ... + a_{n}L^{n}
+$$
+
+* Lag polynomials can be multiplied. Said operation is commutative.
+$$
+  a(L)b(L) = b(L)a(L)
+$$
+
+3. **Centered moving average**
+Restricting the size of the stencil to odd values, a centered moving average can be defined using a lag operator. 
+$$
+  cma_{t} \; = \; \frac{1}{N} \sum_{i=0}^{N-1} L^{M} v_{t+i} \;\; \; \;\; 
+  M := (N-1)/2
+$$
+
+Where M is guaranteed to be integer if N is odd.
+
+**Caveats**: Be careful with the programming language/library/package of your choice. Some functions may yield errors or warnings. Some others may exhibit undefined behaviour. Others could be well defined but not act as expected.
+
 
 ```{r moving.averages}
 n <- 200
