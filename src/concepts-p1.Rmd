@@ -128,7 +128,7 @@ $$
 
 Where M is guaranteed to be integer if N is odd.
 
-**Caveats**: Be careful with the programming language/library/package of your choice. Some functions may yield errors or warnings. Some others may exhibit undefined behaviour. Others could be well defined but not act as expected.
+**Caveats**: When computing moving averages, be careful with the programming language/library/package of your choice. Some functions may yield errors or warnings. Some others may exhibit undefined behaviour. Others could be well defined but not act as expected. Here I show how to calculate both _centered_ and _left_ moving averages in **R**. To check the documentation of a function in **R**, type the name of the function preceeded by a question mark i.e. ``` ?filter ```.
 
 
 ```{r moving.averages}
@@ -140,7 +140,8 @@ m.avg <-data.frame(
   c3 = filter(w, sides=2, filter=rep(1/3,3)), # centered moving average 
   c5 = filter(w, sides=2, filter=rep(1/5,5)), # centered moving average
   l3 = filter(w, sides=1, filter=rep(1/3,3)), # left moving average
-  l5 = filter(w, sides=1, filter=rep(1/5,5))  # left moving average 
+  l5 = filter(w, sides=1, filter=rep(1/5,5)), # left moving average
+  l10 = filter(w, sides=1, filter=rep(1/10,10)) # left moving average
 )
 # We `melt` the data.frame to enable easier visualisation.
 melted.m.avg <- melt(m.avg, id="x")
