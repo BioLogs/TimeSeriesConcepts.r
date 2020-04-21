@@ -8,3 +8,7 @@ All documents are writen in [R Markdown](https://rmarkdown.rstudio.com/) markup 
 ## Index
 
 1. [Introducition to Time Series I](build/concepts-p1.html)
+    * Definition
+    * Examples
+    * Basic Techniques
+
