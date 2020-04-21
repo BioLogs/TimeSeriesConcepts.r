@@ -131,7 +131,7 @@ Where M is guaranteed to be integer if N is odd.
 **Caveats**: When computing moving averages, be careful with the programming language/library/package of your choice. Some functions may yield errors or warnings. Some others may exhibit undefined behaviour. Others could be well defined but not act as expected. Here I show how to calculate both _centered_ and _left_ moving averages in **R**. To check the documentation of a function in **R**, type the name of the function preceeded by a question mark i.e. ``` ?filter ```.
 
 
-```{r moving.averages}
+```{r moving.averages, warning=FALSE}
 n <- 200
 w <- rnorm(n,0,1)  # n N(0,1) variates 
 m.avg <-data.frame(
@@ -149,6 +149,43 @@ p.m.avg <- ggplot(data = melted.m.avg, aes(x = x, y = value, color = variable)) 
   geom_line() + # we want lines
   facet_grid(variable ~ .) # we want each series to be on a different grid
 print(p.m.avg)
+```
+
+4. **Autoregressions**
+An autoregression is a technique used to determine values of a time series, 
+based on previous observations of itself. In other words, imagine we take 
+the two previous values of time series and use it to compute the current one. 
+We are analising stochastic processes, so there is a random element,
+a deviaton we cannot account for which can be expressed as white noise.
+This subject will be retaken, in depth, afterwards on this course.
+
+$$
+  x_{t} \; = \; \sum_{i=1}^{N}c_{i} x_{t-i} \; + w_{t}
+$$
+
+This equation defines an _autoregression_ of $N$-th order, expressed as 
+a linear combination of previous values and some coefficient plus a 
+white noise term. The following is an example of a second order autoregression performed on the previously presented glycaemic data.
+
+$$
+  glucose_{t} = glucose_{t-1} - 0.9glucose_{t-2} + w_{t}
+$$
+
+Note how the same function ```filter``` is used to perform moving average
+calculations and autoregressions. This is achieved by changing the value 
+of the ```method``` parameter.
+
+* ``` method = "concolution" ``` for **moving average**
+* ``` method = "recursive"   ``` for **autoregression**
+
+```{r autoregression, warning=FALSE}
+glc$autoreg <- filter(glc$glucose, filter=c(1,-.9), method="recursive")
+melted.glc <- melt(glc, id="datetime")
+p.glc.autoreg <- ggplot(
+    data = melted.glc, 
+    aes(x = as_datetime(datetime), y = value, color = variable)
+  ) + geom_line() # we want lines
+print(p.glc.autoreg)
 ```
 
 
