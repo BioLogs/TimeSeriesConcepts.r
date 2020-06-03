@@ -188,4 +188,30 @@ p.glc.autoreg <- ggplot(
 print(p.glc.autoreg)
 ```
 
+5. **Random Walk**
+Another possible model for describing stochastic processes, are _random walks_. In these models, each observation $x_{t}$ is given by the previous value $x_{t-1}$ plus a random value. This could be, for instance, _white noise_ $w_{t}$. These models can also include _drift_ $\delta$ which is a constant that expresses a trend. Summed up, it is written as follows:
+
+
+$$
+x_{t} = \delta + x_{t-1} + w_{t}
+$$
+
+Which can alternatively be simply the summation of white noise observations, plus the trend (drift), and an initial value.
+
+$$
+x_{t} = \delta t + \sum_{j=1}^{t}w_{j} + x_{0} 
+$$
+
+```{r randomwalk, warning=TRUE}
+set.seed(154) # Reproducibility
+w = rnorm(200); 
+x = cumsum(w)
+delta = .2
+wd = w + delta  # R automatically performs element-wise addition. No need to iterate 
+xd = cumsum(wd)
+plot.ts(xd, ylim=c(-5,55), main="random walk", ylab='')
+lines(x, col=4)
+abline(h=0, col=4, lty=2) 
+abline(a=0, b=.2, lty=2)
+```
 
