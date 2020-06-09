@@ -1,5 +1,6 @@
 # Mine : 
-data/*
+data/*          # We don't want to upload our data to the repo.
+src/*.html      # We don't want intermedate RStudio knits on our remote source directory.
 
 # History files
 .Rhistory

@@ -146,3 +146,32 @@ $$
 ```{r lol}
 ggAcf(glc$glucose, type = c("correlation"))
 ```
+
+## Cross-covariance function
+As its name implies, this function expresses the covariance between two time series.
+
+$$
+\gamma_{xy}(s, t) = cov(x_{s}, y_{t}) = E[(x_{s} - \mu_{xs})(y_{t} - \mu_{yt})]
+$$
+
+Analogously, wa have the _sample cross-covariance function_. Note that we continue to use the simplification $h = | s - t |$, so we're taking [lags](build/concepts-p1.html) instead of the positions. 
+
+$$
+\hat{\gamma}_{xy}(h) = n^{-1}\sum_{t=1}^{n-h}(x_{t+h} - \bar{x})(y_{t} - \bar{y})
+$$
+
+```{r data.import2}
+diab <- read.csv("../data/multivariate_diabetic_week.csv")
+diab$datetime <- sapply(diab$datetime, as_datetime)
+mean(diab$glucose)
+```
+
+```{r side.acfs, echo=TRUE, fig.width=15, fig.height=7}
+par(mfrow=c(1,2))
+acf(diab$glucose, 180, main="Glycaemia")
+acf(diab$basal, 180, main="Basal Insulin Dose")
+```
+
+```{r ccf, echo=TRUE, fig.width=15, fig.height=7}
+ccf(diab$glucose, diab$basal, 240, main="Glycaemia vs Basal Insulin Dose", ylab="CCF")
+```
