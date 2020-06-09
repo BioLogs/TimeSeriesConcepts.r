@@ -13,7 +13,20 @@ This document gathers some main concepts in time
 series analysis as well as some examples written 
 in [R](https://www.r-project.org/). R is a free software environment for statistical computing and graphics. It compiles and runs on a wide variety of UNIX platforms, Windows and MacOS. 
 
-
+## Index
+  * Used packages
+  * Reproducibility
+  * Some definitions
+  * Examples
+    1. White noise
+    2. Glycaemic History
+  * Basic techniques
+    1. Moving average
+    2. Lag Operator
+    3. Centered moving average
+    4. Autoregressions
+  * Random Walk
+  
 ## Used packages
 When working with R, we can define our own functions and create modules called packages which serve a specific purpose. These can be submitted to [CRAN](https://cran.r-project.org/)(The Comprehensive R Archive Network). Publishing a package enables people to use the code you have developed!
 In this case we are using the following packages:
@@ -188,7 +201,7 @@ p.glc.autoreg <- ggplot(
 print(p.glc.autoreg)
 ```
 
-5. **Random Walk**
+## Random Walk
 Another possible model for describing stochastic processes, are _random walks_. In these models, each observation $x_{t}$ is given by the previous value $x_{t-1}$ plus a random value. This could be, for instance, _white noise_ $w_{t}$. These models can also include _drift_ $\delta$ which is a constant that expresses a trend. Summed up, it is written as follows:
 
 
