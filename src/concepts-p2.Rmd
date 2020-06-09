@@ -1,0 +1,148 @@
+---
+title: "Introduction to Time Series II"
+author: "Gustavo Magaña López"
+date: "6/3/2020"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+
+
+In this case we are using the following packages:
+```{r imports, message=FALSE, warning=FALSE}
+library(ggplot2)
+library(lubridate)
+library(reshape2)
+library(forecast)
+library(gridExtra)
+```
+
+## Reproducibility
+In order for you to reproduce the results found in this notebook, we must set a seed for the random number generator.
+```{r seed, message=FALSE, warning=FALSE}
+  set.seed(204) # so you can reproduce the results
+```
+
+
+## Statistical analysis of time series
+The collection of observations or realisations that make up a time series: let's say $n$ random variables observed at arbitrary time points $t_{1}, ..., t_{n}$ can be completely described by the joint distribution function. This function is then evaluated as the probability that the values of the series are jointly less than the $n$ constants $c_{1}, ..., c_{n}$.
+
+$$
+F_{t_{1}, t_{2}, .., t_{n}} (c_{1}, c_{2}, ... c_{n}) = Pr(x_{t_{1}} \leq c_{1}, x_{t_{2}} \leq c_{2}, ..., x_{t_{n}} \leq c_{n})
+$$
+
+Nevertheless this function is of little practical value in the analysis we are interested in performing. The marginal distribution and density functions, when they exist, are informative when looking at the marginal behaviour of a series.
+
+$$
+F_{t}(x) = P\{ x_{t} \leq x\} \;\;\;\;\;\; ;
+\;\;\;\;\;\; f_{t}(x) = \frac{\partial F_{t}(x)}{\partial x}
+$$
+
+The main metrics that we will discuss (and mostly show a practical example), are the following:
+
+* Mean
+* Autocovariance
+* Autocorrelation
+* Cross-covariance
+* Cross-correlation
+
+These are fundamental when talking about _stationary_ time series. This concept will be defined, perhaps in another chapter, to enhance future understanding of models and their underlying assumptions. **Note** that each one will have its general definition (for the population and the sample).
+
+## Mean function
+This is analogue to our traditional expected value operator. Note that when there is no confusion, the subscript $x$ becomes redundant.
+
+$$
+\mu_{xt} = E(x_{t}) = \int_{-\infty}^{\infty}xf_{t}(x)dx
+$$
+
+When estimating this population mean, the default statistic is the _sample mean_. In other words we are implying $E(\bar{x}) = \mu$. It is defined as follows:
+
+$$
+\bar{x} = \frac{1}{n}\sum_{t=1}^{n}x_{t}
+$$
+
+Taking the cotinuous glucose montiring of a non diabetic patient, we can visualise that the builtin _mean_ function can provide the _sample mean_ with simplicity.
+
+```{r data.import}
+glc <- read.csv("../data/example_non_diabetic1.csv")
+glc$datetime <- sapply(glc$datetime, as_datetime)
+mean(glc$glucose)
+```
+
+We can observe the mean on top of the time series:
+
+```{r glc.tsplot}
+# Display the time series 
+glc.ts.plt <- ggplot(data = glc, aes(x = as_datetime(datetime), y = glucose)) + 
+  geom_line(color = "#00AFBB") +
+  geom_hline(yintercept =  mean(glc$glucose)) # Add an horizontal line : the mean
+print(glc.ts.plt)
+```
+
+Or simultaneously with its distplot:
+
+```{r glc.distplot}
+# Generate a histogram with a density estimate
+glc.dist.plt <- ggplot(glc, aes(x=glucose)) +
+  geom_histogram(aes(y=..density..), colour="black", bins=18) +
+    geom_density(alpha=.2, fill="blue") +
+    geom_vline(xintercept = mean(glc$glucose)) # Add a vertical line : the mean
+print(glc.dist.plt)
+```
+
+## Autocovariance function
+
+This is crucial tool for time series analysis. It measures the linear dependence between two points on the same time series, observed at different times. It is mathematically defined as the following second moment product. Notice how once again, the subscript in $\gamma_{x}$ just denotes the time series thus becomming redundant at times.
+
+$$
+\gamma_{x}(s, t) = cov(x_{s}, x_{t}) = E[(x_{s} - \mu_{s})(x_{t} - \mu_{t})]
+$$
+
+From here it follows, that for $s = t$, autocovariance reduces to the (assumed finite) variance:
+
+$$
+\gamma_{x}(t,t) = E[(x_{t} - \mu_{t})^{2}] = var(x_{t})
+$$
+
+**Note** that $\gamma_{x}(s,t) = 0$ implies that $x_{s}$ and $x_{t}$ are not _linearly_ related, but some other form of dependence may exist. However, **if these are bivariate normal**, $\gamma_{x}(s,t) = 0$ ensures their **independence**. 
+
+
+Just as we did with the mean, we define the _sample autocovariance function_:
+
+$$
+\hat{\gamma}(h) = n^{-1}\sum_{t=1}^{n-h}(x_{t+h} - \bar{x})(x_{t} - \bar{x})
+$$
+Note that this deffinition has be simplified to be a function of the distance $h = | s - t |$ rather than the positions $t$, $s$ themselves. Calulating the _sample autocovariance function_ is rather simple in R, as shown by the following example:
+
+```{r autocov}
+acf(glc$glucose, type = c("covariance"))
+```
+
+## Autocorrelation function (ACF)
+
+As we remember from our statistics lectures, correlation measures linear predictability. In this case, we get a notion of how predicatble the time series is a time $t$, i.e. $x_{t}$, using only the value $x_{s}$. Hence we have a rough idea of the ability to forecast the series at time $t$ using the value at time $s$. 
+
+$$
+\rho(s, t) = \frac{\gamma(s, t)}{\sqrt{\gamma(s,s)\gamma(t,t) }}
+$$
+One can show that the **ACF** is bounded using the Cauchy-Schwarz inequality which implies the following:
+
+$$
+|\gamma(s, t)|^{2} \leq \gamma(s,s) \gamma(t, t) \;\;\;
+\longrightarrow \;\;\;
+-1 \leq \rho(s, t) \leq 1
+$$
+
+
+Analogously to the definition of the _sample autocovariance function_, we can construct the definition for the _sample autocorrelation function_ as follows:
+
+$$
+\hat{\rho}(h) = \frac{\hat{\gamma}(h)}{\hat{\gamma}(0)} 
+$$
+
+```{r lol}
+ggAcf(glc$glucose, type = c("correlation"))
+```
