@@ -154,7 +154,7 @@ $$
 \gamma_{xy}(s, t) = cov(x_{s}, y_{t}) = E[(x_{s} - \mu_{xs})(y_{t} - \mu_{yt})]
 $$
 
-Analogously, wa have the _sample cross-covariance function_. Note that we continue to use the simplification $h = | s - t |$, so we're taking [lags](build/concepts-p1.html) instead of the positions. 
+Analogously, wa have the _sample cross-covariance function_. Note that we continue to use the simplification $h = | s - t |$, so we're taking [lags](concepts-p1.html) instead of the positions. 
 
 $$
 \hat{\gamma}_{xy}(h) = n^{-1}\sum_{t=1}^{n-h}(x_{t+h} - \bar{x})(y_{t} - \bar{y})
