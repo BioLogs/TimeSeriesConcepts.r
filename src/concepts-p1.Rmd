@@ -59,7 +59,7 @@ Thus, we can conclude that time series are a sort of stochastic processes.
 For example, one of the basic time series is **white noise**, which is a time series
 generated from uncorrelated variables, which are most of the time *normally distributed*.
 
-```{r whitenoise}
+```{r whitenoise, echo=TRUE, fig.width=15, fig.height=7}
 white.noise <-  rnorm(300,0,1) # N(0,1) variates 
 plot(white.noise, type = "l")
 ```
@@ -72,7 +72,7 @@ This collection of random variables $e_{t}$ have the following properties:
 
 For this particular case, having only a couple hundred observations, the estimations are slightly biased but we can observe nevertheless that these properties are conserved. Here we have descriptive statistics for the previously generated **realisation** of _gaussian white noise_, as well as a visualisation of its distribution courtesy of [ggplot2](https://ggplot2.tidyverse.org/).
 
-```{r descriptive.stats}
+```{r descriptive.stats, echo=TRUE, fig.width=15, fig.height=7}
 mean(white.noise)
 var(white.noise)
 p.w <- ggplot(as.data.frame(white.noise), aes(x=white.noise)) +
@@ -85,7 +85,7 @@ print(p.w)
 
 We can visualise another type of _time series_, this time a real biomedical example: **glycaemic history**! 
 
-```{r glycaemia}
+```{r glycaemia, echo=TRUE, fig.width=15, fig.height=7}
 glc <- read.csv("../data/example_glucose.csv")
 glc$datetime <- sapply(glc$datetime, as_datetime)
 p.glc <- ggplot(data = glc, aes(x = as_datetime(datetime), y = glucose)) + 
@@ -144,7 +144,7 @@ Where M is guaranteed to be integer if N is odd.
 **Caveats**: When computing moving averages, be careful with the programming language/library/package of your choice. Some functions may yield errors or warnings. Some others may exhibit undefined behaviour. Others could be well defined but not act as expected. Here I show how to calculate both _centered_ and _left_ moving averages in **R**. To check the documentation of a function in **R**, type the name of the function preceeded by a question mark i.e. ``` ?filter ```.
 
 
-```{r moving.averages, warning=FALSE}
+```{r moving.averages, warning=FALSE, echo=TRUE, fig.width=15, fig.height=7}
 n <- 200
 w <- rnorm(n,0,1)  # n N(0,1) variates 
 m.avg <-data.frame(
@@ -191,8 +191,8 @@ of the ```method``` parameter.
 * ``` method = "concolution" ``` for **moving average**
 * ``` method = "recursive"   ``` for **autoregression**
 
-```{r autoregression, warning=FALSE}
-glc$autoreg <- filter(glc$glucose, filter=c(1,-.9), method="recursive")
+```{r autoregression, warning=FALSE, echo=TRUE, fig.width=15, fig.height=7}
+glc$autoreg <- filter(glc$glucose, filter=c(1, -.9), method="recursive")
 melted.glc <- melt(glc, id="datetime")
 p.glc.autoreg <- ggplot(
     data = melted.glc, 
@@ -215,7 +215,7 @@ $$
 x_{t} = \delta t + \sum_{j=1}^{t}w_{j} + x_{0} 
 $$
 
-```{r randomwalk, warning=TRUE}
+```{r randomwalk, warning=TRUE, echo=TRUE, fig.width=15, fig.height=7}
 set.seed(154) # Reproducibility
 w = rnorm(200); 
 x = cumsum(w)
