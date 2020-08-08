@@ -7,8 +7,13 @@ All documents are writen in [R Markdown](https://rmarkdown.rstudio.com/) markup 
 
 ## Index
 
-1. [Introducition to Time Series I](build/concepts-p1.html)
+1. [Introduction to Time Series I](build/concepts-p1.html)
     * Definition
     * Examples
     * Basic Techniques
 
+
+2. [Introduction to Time Series II](build/concepts-p2.html)
+    * Mean
+    * Autocovariance
+    * Autocorrelation
