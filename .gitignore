@@ -1,3 +1,11 @@
+
+# macOS :
+.DS_Store
+
+# Renv : 
+renv
+legacy_renv
+
 # History files
 .Rhistory
 .Rapp.history
