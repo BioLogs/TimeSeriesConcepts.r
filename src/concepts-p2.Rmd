@@ -14,6 +14,7 @@ knitr::opts_chunk$set(echo = TRUE)
 In this case we are using the following packages:
 ```{r imports, message=FALSE, warning=FALSE}
 library(ggplot2)
+library(RcppTOML)
 library(lubridate)
 library(reshape2)
 library(forecast)
@@ -21,9 +22,10 @@ library(gridExtra)
 ```
 
 ## Reproducibility
-In order for you to reproduce the results found in this notebook, we must set a seed for the random number generator.
+In order for you to reproduce the results found in this notebook, we must set a seed for the random number generator. As mentioned on [the previous chapter](build/concepts-p1.html) we parse our config which includes file locations. 
 ```{r seed, message=FALSE, warning=FALSE}
   set.seed(204) # so you can reproduce the results
+  config <- parseToml("../config.toml") # The only magic constant will be the path to the config file.
 ```
 
 
@@ -67,7 +69,7 @@ $$
 Taking the cotinuous glucose montiring of a non diabetic patient, we can visualise that the builtin _mean_ function can provide the _sample mean_ with simplicity.
 
 ```{r data.import}
-glc <- read.csv("../data/example_non_diabetic1.csv")
+glc <- read.csv(config$data$build$nondiab1)
 glc$datetime <- sapply(glc$datetime, as_datetime)
 mean(glc$glucose)
 ```
@@ -161,7 +163,8 @@ $$
 $$
 
 ```{r data.import2}
-diab <- read.csv("../data/multivariate_diabetic_week.csv")
+#diab <- read.csv("../data/multivariate_diabetic_week.csv")
+diab <- read.csv(config$data$build$weekly_multiv_diabetic)
 diab$datetime <- sapply(diab$datetime, as_datetime)
 mean(diab$glucose)
 ```

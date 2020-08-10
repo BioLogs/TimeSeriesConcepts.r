@@ -34,12 +34,14 @@ In this case we are using the following packages:
 library(ggplot2)
 library(lubridate)
 library(reshape2)
+library(RcppTOML)
 ```
 
 ## Reproducibility
-In order for you to reproduce the results found in this notebooks, we must set a seed for the random number generator. This is a topic beyond the scope of this repo, but I highly advise you to read about [pseudorandom number generators](https://en.wikipedia.org/wiki/Pseudorandom_number_generator).
+In order for you to reproduce the results found in this notebooks, we must set a seed for the random number generator. This is a topic beyond the scope of this repo, but I highly advise you to read about [pseudorandom number generators](https://en.wikipedia.org/wiki/Pseudorandom_number_generator). We might as well parse config from a file to avoid using [**magic constants**](https://en.wikipedia.org/wiki/Magic_number_%28programming%29). For this repo (and many of our my personal projects) my file format of choice is [TOML (Tom's Obvious, Minimal Language)](https://github.com/toml-lang/toml).
 ```{r seed, message=FALSE, warning=FALSE}
   set.seed(204) # so you can reproduce the results
+  config <- parseToml("../config.toml") # The only magic constant will be the path to the config file.
 ```
 
 
@@ -86,7 +88,8 @@ print(p.w)
 We can visualise another type of _time series_, this time a real biomedical example: **glycaemic history**! 
 
 ```{r glycaemia, echo=TRUE, fig.width=15, fig.height=7}
-glc <- read.csv("../data/example_glucose.csv")
+#glc <- read.csv("../data/example_glucose.csv")
+glc <- read.csv(config$data$build$example_glc)
 glc$datetime <- sapply(glc$datetime, as_datetime)
 p.glc <- ggplot(data = glc, aes(x = as_datetime(datetime), y = glucose)) + 
   geom_line(color = "#00AFBB")

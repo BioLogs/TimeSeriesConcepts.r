@@ -1,0 +1,31 @@
+#
+#       This file was edited by hand to eliminate
+#       "magic strings". In addition to this, Rscript
+#       won't find RStudio's pandoc installation 
+#       which makes rendering the site impossible.
+#       Feel free to tweak it to best suit your needs.
+#
+
+# Input/Output locations
+[directories]
+source="src/"
+dest="build/"
+
+# Help Rscript find pandoc
+[paths]
+pandoc="/Applications/RStudio.app/Contents/MacOS/pandoc"
+
+# Set the location ouf our data files,
+# There is a subtable data.build which contains
+# duplicates of their homologues, with a prefix 
+# to complete the relative path. 
+# This might not be the best approach but it works for
+# the moment.
+[data]
+build.example_glc="../data/example_glucose.csv"
+build.nondiab1="../data/example_non_diabetic1.csv"
+build.weekly_multiv_diabetic="../data/multivariate_diabetic_week.csv"
+example_glc="data/example_glucose.csv"
+nondiab1="data/example_non_diabetic1.csv"
+weekly_multiv_diabetic="data/multivariate_diabetic_week.csv"
+
