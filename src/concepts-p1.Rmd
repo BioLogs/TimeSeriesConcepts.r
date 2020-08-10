@@ -32,6 +32,7 @@ When working with R, we can define our own functions and create modules called p
 In this case we are using the following packages:
 ```{r imports, message=FALSE, warning=FALSE}
 library(ggplot2)
+library(readr)
 library(lubridate)
 library(reshape2)
 library(RcppTOML)
@@ -88,9 +89,9 @@ print(p.w)
 We can visualise another type of _time series_, this time a real biomedical example: **glycaemic history**! 
 
 ```{r glycaemia, echo=TRUE, fig.width=15, fig.height=7}
-#glc <- read.csv("../data/example_glucose.csv")
-glc <- read.csv(config$data$build$example_glc)
-glc$datetime <- sapply(glc$datetime, as_datetime)
+#glc <- read_csv("../data/example_glucose.csv")
+glc <- read_csv(config$data$build$example_glc)
+#glc$datetime <- sapply(glc$datetime, as_datetime)
 p.glc <- ggplot(data = glc, aes(x = as_datetime(datetime), y = glucose)) + 
   geom_line(color = "#00AFBB")
 print(p.glc)

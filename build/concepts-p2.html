@@ -371,6 +371,7 @@ summary {
 
 <p>In this case we are using the following packages:</p>
 <pre class="r"><code>library(ggplot2)
+library(readr)
 library(RcppTOML)
 library(lubridate)
 library(reshape2)
@@ -414,8 +415,13 @@ F_{t}(x) = P\{ x_{t} \leq x\} \;\;\;\;\;\; ;
 \bar{x} = \frac{1}{n}\sum_{t=1}^{n}x_{t}
 \]</span></p>
 <p>Taking the cotinuous glucose montiring of a non diabetic patient, we can visualise that the builtin <em>mean</em> function can provide the <em>sample mean</em> with simplicity.</p>
-<pre class="r"><code>glc &lt;- read.csv(config$data$build$nondiab1)
-glc$datetime &lt;- sapply(glc$datetime, as_datetime)
+<pre class="r"><code>glc &lt;- read_csv(config$data$build$nondiab1)</code></pre>
+<pre><code>## Parsed with column specification:
+## cols(
+##   datetime = col_datetime(format = &quot;&quot;),
+##   glucose = col_double()
+## )</code></pre>
+<pre class="r"><code>#glc$datetime &lt;- sapply(glc$datetime, as_datetime)
 mean(glc$glucose)</code></pre>
 <pre><code>## [1] 99.31518</code></pre>
 <p>We can observe the mean on top of the time series:</p>
@@ -480,9 +486,16 @@ print(glc.dist.plt)</code></pre>
 <p><span class="math display">\[
 \hat{\gamma}_{xy}(h) = n^{-1}\sum_{t=1}^{n-h}(x_{t+h} - \bar{x})(y_{t} - \bar{y})
 \]</span></p>
-<pre class="r"><code>#diab &lt;- read.csv(&quot;../data/multivariate_diabetic_week.csv&quot;)
-diab &lt;- read.csv(config$data$build$weekly_multiv_diabetic)
-diab$datetime &lt;- sapply(diab$datetime, as_datetime)
+<pre class="r"><code>#diab &lt;- read_csv(&quot;../data/multivariate_diabetic_week.csv&quot;)
+diab &lt;- read_csv(config$data$build$weekly_multiv_diabetic)</code></pre>
+<pre><code>## Parsed with column specification:
+## cols(
+##   datetime = col_datetime(format = &quot;&quot;),
+##   glucose = col_double(),
+##   ratio = col_double(),
+##   basal = col_double()
+## )</code></pre>
+<pre class="r"><code>#diab$datetime &lt;- sapply(diab$datetime, as_datetime)
 mean(diab$glucose)</code></pre>
 <pre><code>## [1] 140.2943</code></pre>
 <pre class="r"><code>par(mfrow=c(1,2))

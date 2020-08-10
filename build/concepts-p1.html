@@ -395,6 +395,7 @@ summary {
 <h2>Used packages</h2>
 <p>When working with R, we can define our own functions and create modules called packages which serve a specific purpose. These can be submitted to <a href="https://cran.r-project.org/">CRAN</a>(The Comprehensive R Archive Network). Publishing a package enables people to use the code you have developed! In this case we are using the following packages:</p>
 <pre class="r"><code>library(ggplot2)
+library(readr)
 library(lubridate)
 library(reshape2)
 library(RcppTOML)</code></pre>
@@ -444,9 +445,14 @@ print(p.w)</code></pre>
 <li><strong>Glycaemic history</strong></li>
 </ol>
 <p>We can visualise another type of <em>time series</em>, this time a real biomedical example: <strong>glycaemic history</strong>!</p>
-<pre class="r"><code>#glc &lt;- read.csv(&quot;../data/example_glucose.csv&quot;)
-glc &lt;- read.csv(config$data$build$example_glc)
-glc$datetime &lt;- sapply(glc$datetime, as_datetime)
+<pre class="r"><code>#glc &lt;- read_csv(&quot;../data/example_glucose.csv&quot;)
+glc &lt;- read_csv(config$data$build$example_glc)</code></pre>
+<pre><code>## Parsed with column specification:
+## cols(
+##   datetime = col_datetime(format = &quot;&quot;),
+##   glucose = col_double()
+## )</code></pre>
+<pre class="r"><code>#glc$datetime &lt;- sapply(glc$datetime, as_datetime)
 p.glc &lt;- ggplot(data = glc, aes(x = as_datetime(datetime), y = glucose)) + 
   geom_line(color = &quot;#00AFBB&quot;)
 print(p.glc)</code></pre>
