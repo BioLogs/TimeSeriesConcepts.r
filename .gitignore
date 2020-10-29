@@ -1,15 +1,28 @@
 # macOS :
 .DS_Store
 
+# vim :
+.*.swp
+
 # Renv : 
 renv
 legacy_renv
 
 # Mine : 
+# Ignore all files that have personal data mijn.*
+mijn.data
+mijn.src
+mijn.build
+mijn.config
 data            # We don't want to upload our data to the repo.
 data/
 data/*
 src/*.html      # We don't want intermedate RStudio knits on our remote source directory.
+src/*.log       # idem  
+src/*.tex       # idem  
+build/*.pdf
+
+*.png
 
 # History files
 .Rhistory

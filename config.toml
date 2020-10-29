@@ -11,9 +11,15 @@
 source="src/"
 dest="build/"
 
+# Knit Options
+[options]
+output="html_document"
+verbose=false
+
 # Help Rscript find pandoc
 [paths]
 pandoc="/Applications/RStudio.app/Contents/MacOS/pandoc"
+pdflatex="/opt/local/bin/pdflatex" 
 
 # Set the location ouf our data files,
 # There is a subtable data.build which contains
@@ -24,8 +30,13 @@ pandoc="/Applications/RStudio.app/Contents/MacOS/pandoc"
 [data]
 build.example_glc="../data/example_glucose.csv"
 build.nondiab1="../data/example_non_diabetic1.csv"
+build.nondiabi="../data/faml_interpolated.csv"
 build.weekly_multiv_diabetic="../data/multivariate_diabetic_week.csv"
+build.sensor="../data/interstitial_3_month.csv"
 example_glc="data/example_glucose.csv"
 nondiab1="data/example_non_diabetic1.csv"
+nondiabi="data/faml_interpolated.csv"
 weekly_multiv_diabetic="data/multivariate_diabetic_week.csv"
+sensor="data/interstitial_3_month.csv"
+
 
